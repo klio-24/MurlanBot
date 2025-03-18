@@ -4,9 +4,12 @@ def possible_moves_for_hand(hand):
 
     moves = []
 
+
+
     # single  
     for card in hand:
-        moves.append([card])
+        moves.append(["single", 1, [card]]) # this is the default 'play hand', so the structure is a list of the hand kind (single, double, straight), then the hand size, then the actual hand
+        
 
     # double
 
