@@ -1,3 +1,7 @@
+
+from collections import defaultdict
+from itertools import combinations
+
 def possible_moves_for_hand(hand):
 
 # test = player1_hand[0]["rank"]
@@ -13,38 +17,23 @@ def possible_moves_for_hand(hand):
 
     # double
 
-    
-
     # triple
 
-    # quad
-
-    # for card in hand:
-    #     if rank is equal to the next three cards in the hand:
-    #         moves.append([card, next card, next next card, next next next card])
-
-    # straight
-
-    # for card in hand:
-        
-    #     if hand(card+1).rank
-
-    #     if rank of first card is equal to the rank of the next card minus 1 and this applies for at least 5 cards:
-    #         if it doesnt contain rank of black joker or rank of black jocker
-
-    #             if it doesnt contain  K  and ace and two
-    #         (make sure this means 5 cards and 6 cards and 7 cards work etc etc)
+    # Dictionary to count occurrences of each rank
+    rank_count = defaultdict(list)
     
-
-    # # prison straight
-
-    # for card in hand:
-    #     if rank of first card is equal to the rank of the next card minus 1 and theres 3 of those, then one minus for the next
-    #         if it doesnt contain rank of black joker or rank of black jocker
-
-    #             if it doesnt contain  K  and ace and two
+    # Group cards by their rank (storing full card information)
+    for card in hand:
+        rank = card[:-1]  # Extract the rank (remove the suit)
+        rank_count[rank].append(card)
     
-
-
+    # List to store all possible triplet combinations
+    triplet_combinations = []
+    
+    # For each rank, generate combinations of 3 cards if there are 3 or more cards
+    for rank, cards in rank_count.items():
+        if len(cards) >= 3:
+            # Generate all combinations of 3 cards from the list of cards
+            triplet_combinations.extend(combinations(cards, 3))
+    
     return moves
-
