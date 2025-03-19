@@ -8,3 +8,5 @@ ok so from this video it seems the AI strategy should be ISMCTS as the game is t
 7/12 - making two files, one which is a library for all possible moves, one of them is a function which then extracts only the ones which are possible from a game situation. This links into the monte carlo thing because I need a way to play a random move from all possible moves. Just not sure what the right data structure is because possible moves will form a three dimensional. WAIT just realised I just need to make the function, and the library of possible moves can come from just passing the whole deck to the function.
 
 18/3 - not implementing prison straight
+
+19/3 - checking how many possible combinations for straights made me now plan to skip straights altogether as there will also be big training requirements - I really want a minimum viable product as soon as possible.
