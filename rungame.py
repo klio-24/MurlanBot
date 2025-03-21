@@ -4,7 +4,7 @@ from print_hand_nicely import print_hand_nicely
 from possible_moves_for_hand import possible_moves_for_hand
 from print_moves_nicely import print_moves_nicely
 from playable_moves_for_hand import playable_moves_for_hand
-from who_starts import who_starts
+from helper_functions.who_starts import who_starts
 import random
 
 
