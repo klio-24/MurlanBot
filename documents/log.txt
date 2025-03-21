@@ -14,3 +14,8 @@ ok so from this video it seems the AI strategy should be ISMCTS as the game is t
 19/3 - checking how many possible combinations for straights made me now plan to skip straights altogether as there will also be big training requirements - I really want a minimum viable product as soon as possible.
 
 I'm also going to skip quads because they have the power to take a turn, so I'll implement that behaviour later.
+
+20/3 - realising from the Wanieru video that the MCTS is seperate from the ML, and e.g. alphago uses ML for a seperate thing which I don't understand yet (policy network and value network)
+So my first step should be make an MCTS before I deal with the ML model.
+
+21/3 - the more I think about it the more I realise an ML model might not be needed. down the line maybe yes, when I refine it, but for e.g. the second round is just MCTS and then later I can add on ML
