@@ -19,3 +19,5 @@ I'm also going to skip quads because they have the power to take a turn, so I'll
 So my first step should be make an MCTS before I deal with the ML model.
 
 21/3 - the more I think about it the more I realise an ML model might not be needed. down the line maybe yes, when I refine it, but for e.g. the second round is just MCTS and then later I can add on ML
+
+4/4 - reducing scope based on genas friend advice. just MCTS with some sql on web services with a basic website command line interface
