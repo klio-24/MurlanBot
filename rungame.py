@@ -66,23 +66,15 @@ player2_hand.sort(key=lambda x: x['rank'])
 
 start = who_starts(player1_hand,player2_hand)
 print("Player", start, "starts")
-
-possible_moves = possible_moves_for_hand(player1_hand)
-
 # show results
 
+def play():
 
+    print:
+        Opponent has x cards remaining
+    
+        "Your Cards:"
+    
 
-# run game 2
-round = 2
-
-    # deal the cards
-
-
-
-    # do handicap
-
-    # run the game
-
-# show results
-
+if __name__ == "__main__": # this line ensures game is played only when this script is run and not and import of this script in another file
+    play()

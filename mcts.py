@@ -25,6 +25,23 @@ class MCTS:
         
     
 
+    def information_set_randomiser(played_cards,deck,hand,opponent_hand_size):
+
+        for i in played_cards:
+
+            if i in deck:
+                deck.pop(deck.index(i))
+
+        for i in hand:
+            if i in deck:
+                deck.pop(deck.index(i))
+
+        res = []
+
+        random.shuffle(deck)
+
+        return deck[0:opponent_hand_size-1]
+
     def select_node(self):
         for i in Node.children:
             # select the smallest N
