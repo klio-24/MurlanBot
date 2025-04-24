@@ -25,38 +25,6 @@ print("Player", start, "starts")
 
 possible_moves = possible_moves_for_hand(player1_hand)
 
-while len(player1_hand) !=0 or len(player2_hand) != 0:
-    
-    print_hand_nicely(player1_hand)
-    print("Type 0 to pass")
-    ind = int(input())
-    current_card = player1_hand[ind-1]
-
-    if ind == 0:
-        print("You passed")
-        free_turn = True
-        cards = playable_moves_for_hand(current_card, player2_hand, free_turn)
-    if ind != 0:
-        player1_hand.remove(current_card)
-        free_turn = False
-        print("You played:", current_card["card"],"of" ,current_card["suit"])
-        cards = playable_moves_for_hand(current_card, player2_hand, free_turn)
-
-    if len(cards) == 0:
-        print("Computer passed")
-    else:
-        card = cards[0]
-        print("Computer played:", card["card"],"of" ,card["suit"])
-        player2_hand.remove(card)
-
-    if len(player1_hand) == 0:
-        print("---You won---")
-        break
-    if len(player2_hand) == 0:
-        print("---Computer won---")
-        break
-
-    
 # show results
 
 

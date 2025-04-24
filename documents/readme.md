@@ -1,0 +1,1 @@
+Explain the motivation why just doing the lowest card isn't optimal: e.g. if both players have two cards, the second player puts his biggest card first to try block the first player from placing his second card

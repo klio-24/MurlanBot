@@ -1,9 +1,10 @@
+# Monte Carlo Tree Search Agent
+
 import time
 import random
 import math
 
-opp_hand = [3,5,7,9,11]
-ai_hand = [4,6,8,10,12]
+
 
 # each tree node needs two values: probability of the AI winning from that node; amount of times node visited
 
@@ -13,10 +14,14 @@ class game_state:
         self.on_table = None
         self.legal = []
 
-    def get_legal_moves(self,hand):
-        for i in hand:
-            if i > self.on_table:
+    def get_legal_moves(self,hand,free_turn):
+        if free_turn:
+            for i in hand:
                 self.legal.append(i)
+        else:
+            for i in hand and not free_turn:
+                if i > self.on_table:
+                    self.legal.append(i)
 
     def check_win(self):
         if len(opp_hand) == 0:
@@ -40,6 +45,7 @@ class Node:
 class MCTS:
     def __init__(self):
         self.root = Node(None,None)
+        
     
 
     def select_node(self):
@@ -58,7 +64,7 @@ class MCTS:
 
 
     def backpropogate(self):
-
+        
     def select_move(self):
         # after time up, select move with highest Q through sorting
 
