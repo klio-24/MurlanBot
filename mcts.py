@@ -8,27 +8,6 @@ import math
 
 # each tree node needs two values: probability of the AI winning from that node; amount of times node visited
 
-class game_state:
-    def __init__(self):
-        self.last_played = []
-        self.on_table = None
-        self.legal = []
-
-    def get_legal_moves(self,hand,free_turn):
-        if free_turn:
-            for i in hand:
-                self.legal.append(i)
-        else:
-            for i in hand and not free_turn:
-                if i > self.on_table:
-                    self.legal.append(i)
-
-    def check_win(self):
-        if len(opp_hand) == 0:
-            return -1
-        if len(ai_hand) == 0:
-            return 1
-        return 0
 
 
 class Node:
@@ -39,9 +18,7 @@ class Node:
         self.Q = 0 # win rate at this node
         self.children = {}
     
-
-
-
+    
 class MCTS:
     def __init__(self):
         self.root = Node(None,None)
@@ -77,14 +54,3 @@ class MCTS:
             # run MCTS
 
             rollout_count += 1
-
-
-
-
-def run_game(): 
-
-
-
-
-
-run_game()
