@@ -25,7 +25,7 @@ class MCTS:
         
     
 
-    def information_set_randomiser(played_cards,deck,hand,opponent_hand_size):
+    def random_possible_bot_hand(played_cards,deck,hand,opponent_hand_size):
 
         for i in played_cards:
 
@@ -50,6 +50,8 @@ class MCTS:
         if game_state.game_over():
             return False
 
+        if bot_turn:
+            children = [Node(simulated_bot_hand,parent) for move in game_state.get_legal_moves()]
         children = [Node(move,parent) for move in game_state.get_legal_moves()]
 
     def rollout(self, game_state):
