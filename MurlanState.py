@@ -3,57 +3,40 @@
 class game_state:
     def __init__(self):
         self.on_table = []
-        self.legal = []
-        self.free_turn = None
         self.bot_hand = []
         self.player_hand = [] 
 
 
     def valid_moves(self,hand,free_turn):
-
-                playable_moves = []
-        if free_turn == 1:
-        
-        # is there a way to index the full possible moves so they are ordered in groups
-        if current_play[0] == "single":
-            for i in possible_moves:
-                if i[2]["rank"] > current_play[2]["rank"]:
-                    playable_moves.append(i[2])
-        
-        elif current_play[0] == "double":
-
-
-        elif current_play[0] == "triple":
-
-        else:
-            
+        res = []
         if free_turn:
-            for i in hand:
-                self.legal.append(i)
+            for i in self.player_hand:
+                res.append(i)
         else:
-            for i in hand and not free_turn:
-                if i > self.on_table:
-                    self.legal.append(i)
+            return res
+             
 
     def game_over(self):
-        if len(opp_hand) == 0:
+        if len(self.player_hand) == 0:
             return -1
-        if len(ai_hand) == 0:
+        if len(self.bot_hand) == 0:
             return 1
         return 0
     
     def print_state(self):
-        if not free_turn:
-        print("Move on table is:")
+        if self.on_table:
+            print("Move on table is:")
+            for ind,card in enumerate(self.on_table):
+                print(card["card"], " of ", card["suit"], sep='')
+        else:
+            print("You have a free turn")
 
-        if len(bot_hand)>1:
+        if len(self.bot_hand)>1:
             print("Opponent has many cards left")
         else:
             print("Opponent has 1 card left")
     
-        print("Your Hand")
-
-
-        for ind,card in enumerate(hand):
+        print("Your Hand:")
+        for ind,card in enumerate(self.player_hand):
             print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
          

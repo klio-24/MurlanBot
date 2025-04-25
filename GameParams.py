@@ -1,4 +1,5 @@
 # Defines game parameters, MCTS parameters, and deck (technically a game parameter as you could play with different decks)
+import math
 
 class standard_deck:
 

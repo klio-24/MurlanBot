@@ -1,14 +1,9 @@
 # Monte Carlo Tree Search Agent
-
+from MurlanState import game_state
 import time
 import random
-import math
-
-
 
 # each tree node needs two values: probability of the AI winning from that node; amount of times node visited
-
-
 
 class Node:
     def __init__(self,move,parent):
@@ -17,10 +12,12 @@ class Node:
         self.N = 0 # number of sims from this node
         self.Q = 0 # win rate at this node
         self.children = {}
+        self.turn = 0 # I think this should be like 0: player turn, 1: Bot turn
+        self.result = 0 # I think this should be like 0: continue, 1: Bot wins, 2: player wins
     
     
-class MCTS:
-    def __init__(self):
+class mcts:
+    def __init__(self, state = game_state()):
         self.root = Node(None,None)
         
     
