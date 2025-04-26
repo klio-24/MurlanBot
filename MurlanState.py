@@ -10,6 +10,7 @@ class game_state:
         self.bot_hand = []
         self.player_hand = [] 
         self.bot_possible_cards = []
+        self.turn = 0 # 0 is player turn, 1 is bot turn
 
     def valid_moves(self,hand,turn):
         res = []
@@ -62,11 +63,8 @@ class game_state:
         return res
 
     def game_over(self):
-        if len(self.player_hand) == 0:
-            return False # player wins
-        if len(self.bot_hand) == 0:
-            return True # bot wins
-        return 0
+        if len(self.player_hand) == 0 or len(self.bot_hand) == 0:
+            return True 
     
     def move(self,cards,player):
         for i in cards:

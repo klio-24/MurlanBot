@@ -13,7 +13,6 @@ class Node:
         self.N = 0 # number of sims from this node
         self.Q = 0 # win rate at this node
         self.children = {}
-        self.turn = 0 # I think this should be like 0: player turn, 1: Bot turn
         self.result = 0 # I think this should be like 0: continue, 1: Bot wins, 2: player wins
     
     
