@@ -15,7 +15,6 @@ class Node:
         self.children = {}
         self.result = 0 # I think this should be like 0: continue, 1: Bot wins, 2: player wins
     
-    
 class mcts:
     def __init__(self, state = game_state()):
         self.root_state = deepcopy(state)

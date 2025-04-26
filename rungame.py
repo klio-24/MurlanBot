@@ -4,12 +4,12 @@ from MurlanState import game_state
 from GameParams import standard_deck
 
 def process_move(input,hand):
-    numbers = [int(x)-1 for x in input.split('/') if x.isdigit()]
+    numbers = [int(x)-1 for x in input.split('/') if x.isdigit()] # does the processing (minus one as indexes on screen start from 1)
 
     translated_hand = []
 
     for i in numbers:
-        translated_hand.append(hand[numbers])
+        translated_hand.append(hand[numbers]) # converts processed indexes to the play
 
     return translated_hand
 
@@ -55,7 +55,11 @@ def play():
             if game_state.game_over():
                 print("Game over: You win!")
                 break
-
+            
+        if len(game_state.valid_moves(game_state.bot_hand,game_state.on_table)) == 0:
+            print("Bot has no valid moves, it's your turn again!")
+            continue
+        else:
             bot_move = mcts.make_move()
             game_state.move(bot_move,"bot")
             print("The bot played:")
