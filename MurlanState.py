@@ -72,7 +72,7 @@ class game_state:
         for i in cards:
             if player == "bot":
                 self.bot_hand.remove(i)
-            else:
+            elif player == "player":
                 self.player_hand.remove(i)
         self.on_table = cards
 

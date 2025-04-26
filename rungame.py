@@ -26,8 +26,13 @@ def play():
         player_hand.append(deck.pop())
         bot_hand.append(deck.pop())
 
-    game_state()
+    # Ensuring the shuffled hands are in the same order as the deck so the lookups work right
+    deck_order = {id(card): idx for idx, card in enumerate(standard_deck.deck)}
+    player_hand = sorted(player_hand, key=lambda card: deck_order[id(card)])
+    bot_hand = sorted(player_hand, key=lambda card: deck_order[id(card)])
 
+    # Initialise game state with initial conditions
+    game_state()
     game_state.on_table = []
     game_state.bot_hand = bot_hand
     game_state.player_hand = player_hand
@@ -36,14 +41,17 @@ def play():
     while not game_state.game_over():
         game_state.print_state()
 
-        if len(game_state.valid_moves()) == 0:
+        if len(game_state.valid_moves(game_state.player_hand,game_state.on_table)) == 0:
             print("You have no valid moves, it's the Bot's turn again!")
             continue
 
         else:
-            while process_move(user_move,game_state.player_hand) not in game_state.valid_moves():
-                user_move = input("To skip, type '0', or select moves by picking the cards based on the number before the semicolon, in ascending order, and seperated by a '/': ")
+            move = process_move(user_move,game_state.player_hand)
+            while move not in game_state.valid_moves():
+                user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and seperated by a '/': ")
             
+            game_state.move(move,"player")
+
             if game_state.game_over():
                 print("Game over: You win!")
 
