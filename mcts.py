@@ -34,7 +34,7 @@ class mcts:
         if game_state.game_over():
             return False
 
-        children = [Node(move,parent) for move in game_state.get_legal_moves()]
+        children = [Node(move,parent) for move in game_state.valid_moves()]
 
     def rollout(self, game_state): # performs random moves on this node until the end and gets the outcome
         while not game_state.game_over():
@@ -65,7 +65,7 @@ class mcts:
         self.run_time = run_time
         self.num_rollouts = num_rollouts
 
-    def select_move(self): # after time up, select move with highest Q through sorting
+    def make_move(self): # after time up, select move with highest Q through sorting
         if self.root_state.game_over():
             return [-1]
 
