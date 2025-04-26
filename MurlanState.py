@@ -2,6 +2,7 @@
 
 from collections import Counter
 from itertools import combinations
+import random
 
 class game_state:
     def __init__(self):
@@ -62,9 +63,9 @@ class game_state:
 
     def game_over(self):
         if len(self.player_hand) == 0:
-            return -1
+            return False # player wins
         if len(self.bot_hand) == 0:
-            return 1
+            return True # bot wins
         return 0
     
     def move(self,cards,player):
@@ -82,7 +83,11 @@ class game_state:
         else:
             for i in bot_hand:
                 self.bot_possible_cards.pop(self.bot_possible_cards.index(i))
+        res = []
 
+        random.shuffle(self.bot_possible_cards)
+
+        return self.bot_possible_cards[0:player_hand_size-1]
         
     def print_state(self):
 
