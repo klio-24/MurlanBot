@@ -46,21 +46,25 @@ def play():
             continue
 
         else:
-            move = process_move(user_move,game_state.player_hand)
-            while move not in game_state.valid_moves():
-                user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and seperated by a '/': ")
-            
-            game_state.move(move,"player")
+            user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': ")
+            while user_move not in game_state.valid_moves():
+                print("Invalid move. Try again.")
+                user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': ")
+            game_state.move(user_move,"player")
 
             if game_state.game_over():
                 print("Game over: You win!")
+                break
 
-            bot_hand = mcts.make_move()
+            bot_move = mcts.make_move()
+            game_state.move(bot_move,"bot")
             print("The bot played:")
-
+            for ind,card in enumerate(bot_move):
+                print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
             
             if game_state.game_over():
                 "Game over: Bot won!"
+                break
 
 if __name__ == "__main__": # this line ensures game is played only when this script is run and not and import of this script in another file
     play()
