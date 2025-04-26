@@ -25,7 +25,7 @@ class mcts:
         self.node_count = 0
         self.num_rollouts = 0
     
-    def select_node(self): # algorithm to select node, picks all with maximum value for searching, then randomly selects one of them
+    def select_node(self,node): # algorithm to select node, picks all with maximum value for searching, then randomly selects one of them
         while len(node.children) != 0:
             children = node.children.values()
             max_val = max(children, key=lambda n: n.value())
@@ -34,13 +34,11 @@ class mcts:
         if game_state.game_over():
             return False
 
-        if bot_turn:
-            children = [Node(simulated_bot_hand,parent) for move in game_state.get_legal_moves()]
         children = [Node(move,parent) for move in game_state.get_legal_moves()]
 
     def rollout(self, game_state): # performs random moves on this node until the end and gets the outcome
         while not game_state.game_over():
-            random.choice(game_state.get_legal_moves(ai_hand))
+            random.choice(game_state.get_legal_moves(game_state.bot_hand))
 
     def backpropogate(self): # traverses back up the tree while updating values along the way
         while not node:  
@@ -55,11 +53,27 @@ class mcts:
             node.N += 1
             node = node.parent
 
-    def search(self, t_max: int): # performs the actual MCTS
+    def RUN(self, t_max: int): # performs the actual MCTS
+        start_time = time.process_time()
+
+        num_rollouts = 0
+        while time.process_time - start_time < t_max:
+            node, state = self.select_move()
+            self.backpropogate(node, self.rollout(state))
+            num_rollouts += 1
+        run_time = time.process_time() - start_time
+        self.run_time = run_time
+        self.num_rollouts = num_rollouts
 
     def select_move(self): # after time up, select move with highest Q through sorting
-        
+        if self.root_state.game_over():
+            return [-1]
+
+        best_child = max(self.root.children.values(), key=lambda n: (n.N/n.Q))
+
+        return best_child.move
+
     def move_root(self,move): # moves root of tree based on result
-    
+        self.root = self.root.children[move]
     def stats(self):
         return self.num_rollouts, self.run_time
