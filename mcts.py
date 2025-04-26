@@ -19,19 +19,9 @@ class Node:
 class mcts:
     def __init__(self, state = game_state()):
         self.root = Node(None,None)
-        
     
 
-    def random_possible_bot_hand(played_cards,deck,hand,opponent_hand_size):
 
-        for i in played_cards:
-
-            if i in deck:
-                deck.pop(deck.index(i))
-
-        for i in hand:
-            if i in deck:
-                deck.pop(deck.index(i))
 
         res = []
 
@@ -54,7 +44,6 @@ class mcts:
     def rollout(self, game_state):
         while not game_state.game_over():
             random.choice(game_state.get_legal_moves(ai_hand))
-
 
     def backpropogate(self):
         
