@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <title>Card Game</title>
+    <script>
+        async function sendMove() {
+            const move = document.getElementById("moveInput").value;
+            const res = await fetch('/move', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ move: move })
+            });
+            const data = await res.json();
+            document.getElementById("output").textContent = data.output;
+            document.getElementById("moveInput").value = "";
+        }
+    </script>
+</head>
+<body>
+    <h1>Card Game</h1>
+    <pre id="output">Waiting for your move...</pre>
+    <input id="moveInput" type="text" placeholder="Type your move" onkeydown="if(event.key==='Enter')sendMove()">
+    <button onclick="sendMove()">Submit</button>
+</body>
+</html>
