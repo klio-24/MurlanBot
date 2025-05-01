@@ -1,5 +1,5 @@
 import random
-from MCTS import mcts
+from MonteCarloTreeSearch import mcts
 from MurlanState import game_state
 from GameParams import standard_deck
 
@@ -39,6 +39,8 @@ def play():
     state.player_hand = player_hand
     state.bot_possible_cards = deck
 
+    MCTS = mcts(state)
+
     while not state.game_over():
         state.print_state()
 
@@ -48,12 +50,12 @@ def play():
 
         else:
             user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': ")
-            while user_move not in state.valid_moves():
+            while user_move not in state.valid_moves(state.player_hand,state.on_table):
                 print("Invalid move. Try again.")
                 user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': ")
             
             state.move(user_move,"player")
-            mcts.move(user_move) # moves the root of the tree to the new state
+            MCTS.move(user_move) # moves the root of the tree to the new state
             print("You played:")
             for ind,card in enumerate(user_move):
                 print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
@@ -65,10 +67,10 @@ def play():
             print("Bot has no valid moves, it's your turn again!")
             continue
         else:
-            bot_move = mcts.make_move()
-            num_rollouts, run_time = mcts.stats()
+            bot_move = MCTS.make_move()
+            num_rollouts, run_time = MCTS.stats()
             state.move(bot_move,"bot")
-            mcts.move(bot_move)
+            MCTS.move(bot_move)
 
             print("Search algorithm performed ", num_rollouts, "rollouts in ", run_time, "seconds")
 
