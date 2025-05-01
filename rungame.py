@@ -9,7 +9,7 @@ def process_move(input,hand):
     translated_hand = []
 
     for i in numbers:
-        translated_hand.append(hand[numbers]) # converts processed indexes to the play
+        translated_hand.append(hand[i]) # converts processed indexes to the play
 
     return translated_hand
 
@@ -50,12 +50,14 @@ def play():
 
         else:
             user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': ")
-            while user_move not in state.valid_moves(state.player_hand,state.on_table):
+            while process_move(user_move,player_hand) not in state.valid_moves(state.player_hand,state.on_table):
                 print("Invalid move. Try again.")
                 user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': ")
             
-            state.move(user_move,"player")
-            MCTS.move(user_move) # moves the root of the tree to the new state
+            processed_move = process_move(user_move,player_hand) # processes the input to get the actual cards played
+       
+            state.move(processed_move,"player")
+            MCTS.move(processed_move) # moves the root of the tree to the new state
             print("You played:")
             for ind,card in enumerate(user_move):
                 print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
