@@ -343,7 +343,7 @@ class standard_deck:
         joker_black, joker_red]
 
 class GameMeta:
-    deck = standard_deck.deck()
+    deck = standard_deck.deck
 
 class MCTSMeta:
     EXPLORATION = math.sqrt(2) # UNDERSTAND THIS VALUE LATER

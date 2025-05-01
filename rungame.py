@@ -14,7 +14,7 @@ def process_move(input,hand):
     return translated_hand
 
 def play():
-    deck = standard_deck()
+    deck = standard_deck.deck.copy() 
 
     random.shuffle(deck)
 
@@ -31,42 +31,43 @@ def play():
     player_hand = sorted(player_hand, key=lambda card: deck_order[id(card)])
     bot_hand = sorted(player_hand, key=lambda card: deck_order[id(card)])
 
+
     # Initialise game state with initial conditions
-    game_state()
-    game_state.on_table = []
-    game_state.bot_hand = bot_hand
-    game_state.player_hand = player_hand
-    game_state.bot_possible_cards = deck
+    state = game_state()
+    state.on_table = []
+    state.bot_hand = bot_hand
+    state.player_hand = player_hand
+    state.bot_possible_cards = deck
 
-    while not game_state.game_over():
-        game_state.print_state()
+    while not state.game_over():
+        state.print_state()
 
-        if len(game_state.valid_moves(game_state.player_hand,game_state.on_table)) == 0:
+        if len(state.valid_moves(state.player_hand,state.on_table)) == 0:
             print("You have no valid moves, it's the Bot's turn again!")
             continue
 
         else:
             user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': ")
-            while user_move not in game_state.valid_moves():
+            while user_move not in state.valid_moves():
                 print("Invalid move. Try again.")
                 user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': ")
             
-            game_state.move(user_move,"player")
+            state.move(user_move,"player")
             mcts.move(user_move) # moves the root of the tree to the new state
             print("You played:")
             for ind,card in enumerate(user_move):
                 print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
-            if game_state.game_over():
+            if state.game_over():
                 print("Game over: You win!")
                 break
             
-        if len(game_state.valid_moves(game_state.bot_hand,game_state.on_table)) == 0:
+        if len(state.valid_moves(state.bot_hand,state.on_table)) == 0:
             print("Bot has no valid moves, it's your turn again!")
             continue
         else:
             bot_move = mcts.make_move()
             num_rollouts, run_time = mcts.stats()
-            game_state.move(bot_move,"bot")
+            state.move(bot_move,"bot")
             mcts.move(bot_move)
 
             print("Search algorithm performed ", num_rollouts, "rollouts in ", run_time, "seconds")
@@ -75,7 +76,7 @@ def play():
             for ind,card in enumerate(bot_move):
                 print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
             
-            if game_state.game_over():
+            if state.game_over():
                 "Game over: Bot won!"
                 break
 
