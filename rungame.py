@@ -50,8 +50,12 @@ def play():
             while user_move not in game_state.valid_moves():
                 print("Invalid move. Try again.")
                 user_move = input("Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': ")
+            
             game_state.move(user_move,"player")
-
+            mcts.move(user_move) # moves the root of the tree to the new state
+            print("You played:")
+            for ind,card in enumerate(user_move):
+                print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
             if game_state.game_over():
                 print("Game over: You win!")
                 break
@@ -61,7 +65,13 @@ def play():
             continue
         else:
             bot_move = mcts.make_move()
+
+            num_rollouts, run_time = mcts.statistics()
             game_state.move(bot_move,"bot")
+            mcts.move(bot_move)
+
+            print("Search algorithm performed ", num_rollouts, "rollouts in", run_time, "seconds")
+
             print("The bot played:")
             for ind,card in enumerate(bot_move):
                 print(ind+1,": ", card["card"], " of ", card["suit"], sep='')

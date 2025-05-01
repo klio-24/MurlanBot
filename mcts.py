@@ -3,6 +3,7 @@ from MurlanState import game_state
 import time
 import random
 from copy import deepcopy
+from GameParams import MCTSMeta
 
 # each tree node needs two values: probability of the AI winning from that node; amount of times node visited
 
@@ -14,6 +15,7 @@ class Node:
         self.Q = 0 # win rate at this node
         self.children = {}
         self.result = 0 # I think this should be like 0: continue, 1: Bot wins, 2: player wins
+      
     
 class mcts:
     def __init__(self, state = game_state()):
@@ -22,6 +24,7 @@ class mcts:
         self.run_time = 0
         self.node_count = 0
         self.num_rollouts = 0
+        self.search_time = MCTSMeta.SEARCH_TIME
     
     def select_node(self,node): # algorithm to select node, picks all with maximum value for searching, then randomly selects one of them
         while len(node.children) != 0:
@@ -51,7 +54,7 @@ class mcts:
             node.N += 1
             node = node.parent
 
-    def RUN(self, t_max: int): # performs the actual MCTS
+    def run(self, t_max: int): # performs the actual MCTS
         start_time = time.process_time()
 
         num_rollouts = 0
@@ -67,11 +70,14 @@ class mcts:
         if self.root_state.game_over():
             return [-1]
 
+        mcts.search(self.search_time)
+        move = mcts.best_move()
         best_child = max(self.root.children.values(), key=lambda n: (n.N/n.Q))
 
         return best_child.move
 
-    def move_root(self,move): # moves root of tree based on result
+    def move(self,move): # moves root of tree based on result
         self.root = self.root.children[move]
+
     def stats(self):
         return self.num_rollouts, self.run_time
