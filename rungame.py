@@ -65,12 +65,11 @@ def play():
             continue
         else:
             bot_move = mcts.make_move()
-
-            num_rollouts, run_time = mcts.statistics()
+            num_rollouts, run_time = mcts.stats()
             game_state.move(bot_move,"bot")
             mcts.move(bot_move)
 
-            print("Search algorithm performed ", num_rollouts, "rollouts in", run_time, "seconds")
+            print("Search algorithm performed ", num_rollouts, "rollouts in ", run_time, "seconds")
 
             print("The bot played:")
             for ind,card in enumerate(bot_move):

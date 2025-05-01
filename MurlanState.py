@@ -12,10 +12,10 @@ class game_state:
         self.bot_possible_cards = []
         self.turn = 0 # 0 is player turn, 1 is bot turn
 
-    def valid_moves(self,hand,turn):
+    def valid_moves(self,hand,on_table):
         res = []
 
-        if not turn:
+        if not on_table:
             # Single 
             for card in hand:
                 res.append([card])
@@ -36,7 +36,7 @@ class game_state:
                         res.append(list(combo))
 
         else:
-            power_to_beat = turn[0]["rank"]
+            power_to_beat = on_table[0]["rank"]
             if len(hand) == 1:
                 # Single
                 for card in hand:
@@ -73,6 +73,7 @@ class game_state:
             elif player == "player":
                 self.player_hand.remove(i)
         self.on_table = cards
+        self.turn = 1 if player == "player" else 0
 
     def random_possible_bot_hand(self,turn,bot_hand,player_hand_size):
         if turn == "bot":
@@ -81,7 +82,6 @@ class game_state:
         else:
             for i in bot_hand:
                 self.bot_possible_cards.pop(self.bot_possible_cards.index(i))
-        res = []
 
         random.shuffle(self.bot_possible_cards)
 

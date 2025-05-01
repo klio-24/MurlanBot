@@ -1,9 +1,12 @@
 # Monte Carlo Tree Search Agent
-from MurlanState import game_state
+
 import time
 import random
+import math
+
 from copy import deepcopy
 from GameParams import MCTSMeta
+from MurlanState import game_state
 
 # each tree node needs two values: probability of the AI winning from that node; amount of times node visited
 
@@ -15,6 +18,10 @@ class Node:
         self.Q = 0 # win rate at this node
         self.children = {}
         self.result = 0 # I think this should be like 0: continue, 1: Bot wins, 2: player wins
+    def value(self):
+        if self.N == 0:
+            return float('inf')
+        return self.Q / self.N + MCTSMeta.EXPLORATION * math.sqrt(math.log(self.parent.N) / self.N)      
       
     
 class mcts:
@@ -54,11 +61,11 @@ class mcts:
             node.N += 1
             node = node.parent
 
-    def run(self, t_max: int): # performs the actual MCTS
+    def run(self): # performs the actual MCTS
         start_time = time.process_time()
-
+        t_max = self.search_time
         num_rollouts = 0
-        while time.process_time - start_time < t_max:
+        while time.process_time() - start_time < t_max:
             node, state = self.select_move()
             self.backpropogate(node, self.rollout(state))
             num_rollouts += 1
@@ -66,18 +73,17 @@ class mcts:
         self.run_time = run_time
         self.num_rollouts = num_rollouts
 
-    def make_move(self): # after time up, select move with highest Q through sorting
+    def make_move(self): # after time up, select move with highest Q through sorting, and moves the root to that node
         if self.root_state.game_over():
             return [-1]
 
         mcts.search(self.search_time)
         move = mcts.best_move()
-        best_child = max(self.root.children.values(), key=lambda n: (n.N/n.Q))
+        best_child = max(self.root.children.values(), key=lambda n: n.N/n.Q if n.N > 0 else -1)
+
+        self.root = self.root.children[move]
 
         return best_child.move
-
-    def move(self,move): # moves root of tree based on result
-        self.root = self.root.children[move]
 
     def stats(self):
         return self.num_rollouts, self.run_time
