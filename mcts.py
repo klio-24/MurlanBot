@@ -34,22 +34,37 @@ class mcts:
         self.search_time = MCTSMeta.SEARCH_TIME
     
     def select_node(self,node): # algorithm to select node, picks all with maximum value for searching, then randomly selects one of them
-        while len(node.children) != 0:
-            children = node.children.values()
-            max_val = max(children, key=lambda n: n.value())
+        
+        node = self.root
+        state = deepcopy(self.root_state)
+
+        while node.children: 
+            children = list(node.children.values())
+            random.shuffle(children) # avoids bias by selecting random best child
+            node = max(children, key=lambda child: child.value())
+
+        
+        return node
+        
 
     def expand(self, parent: Node, state: game_state): # for a selected node, it gives it all children nodes which are possible
-        if game_state.game_over():
+        
+        if state.game_over():
             return False
 
-        children = [Node(move,parent) for move in game_state.valid_moves()]
+        for move in state.valid_moves():
+            parent.children[move] = Node(move, parent)
+        return True
 
-    def rollout(self, game_state): # performs random moves on this node until the end and gets the outcome
-        while not game_state.game_over():
-            random.choice(game_state.get_legal_moves(game_state.bot_hand))
+    def rollout(self, state = game_state): # performs random moves on this node until the end and gets the outcome
 
-    def backpropogate(self): # traverses back up the tree while updating values along the way
-        while not node:  
+        while not state.game_over():
+            move = random.choice(state.valid_moves())
+            state.move(move)
+        return state.get_result()  
+    
+    def backpropogate(self, node): # traverses back up the tree while updating values along the way
+        while node is not None:  
             if self.result == 1 and self.turn == 1: # Bot won and currently on a bot node
                 node.Q += 1
             elif self.result == 2 and self.turn == 0: # Player won and currently on a player node
@@ -77,10 +92,12 @@ class mcts:
         if self.root_state.game_over():
             return [-1]
 
+        if move in self.root.children:
+            self.root = self.root.children[move]
+        
         mcts.search(self.search_time)
         move = mcts.best_move()
-        best_child = max(self.root.children.values(), key=lambda n: n.N/n.Q if n.N > 0 else -1)
-
+        best_child = max(self.root.children.values(), key=lambda n: n.N/n.Q if n.N > 0 else -1) 
         self.root = self.root.children[move]
 
         return best_child.move
