@@ -88,6 +88,16 @@ class mcts:
         self.run_time = run_time
         self.num_rollouts = num_rollouts
 
+    def move(self, move): # moves the root of the tree to the new state
+        if move in self.root.children:
+            self.root_state.move(move) # need to move our copy of the state aswell to ensure both are in sync
+            self.root = self.root.children[move]
+            return
+        
+        self.root_state.move(move)
+        self.root = Node(None)
+      
+
     def make_move(self): # after time up, select move with highest Q through sorting, and moves the root to that node
         if self.root_state.game_over():
             return [-1]
@@ -97,7 +107,7 @@ class mcts:
         
         mcts.search(self.search_time)
         move = mcts.best_move()
-        best_child = max(self.root.children.values(), key=lambda n: n.N/n.Q if n.N > 0 else -1) 
+        best_child = max(self.root.children.values(), key=lambda n: n.N/n.Q if n.N > 0 else -1)  
         self.root = self.root.children[move]
 
         return best_child.move
