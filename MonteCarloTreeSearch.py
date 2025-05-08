@@ -47,13 +47,18 @@ class mcts:
         return node
         
 
+    def move_to_tuple(self,move): # converts the move to a tuple so it can be used as a key in the dictionary
+        return tuple(sorted((card["card"], card["suit"], card["rank"]) for card in move))
+    def tuple_to_move(self, move_tuple):
+        return [{"card": card, "suit": suit, "rank": rank} for (card, suit, rank) in move_tuple]
+
     def expand(self, parent: Node, state: game_state): # for a selected node, it gives it all children nodes which are possible
         
         if state.game_over():
             return False
 
         for move in state.valid_moves():
-            parent.children[move] = Node(move, parent)
+            parent.children[self.move_to_tuple(move)] = Node(move, parent)
         return True
 
     def rollout(self, state = game_state): # performs random moves on this node until the end and gets the outcome
@@ -88,14 +93,15 @@ class mcts:
         self.run_time = run_time
         self.num_rollouts = num_rollouts
 
-    def move(self, move): # moves the root of the tree to the new state
-        if move in self.root.children:
+    def move(self, move,player): # moves the root of the tree to the new state
+        
+        if self.move_to_tuple(move) in self.root.children:
             self.root_state.move(move) # need to move our copy of the state aswell to ensure both are in sync
-            self.root = self.root.children[move]
+            self.root = self.root.children[self.move_to_tuple(move)]
             return
         
-        self.root_state.move(move)
-        self.root = Node(None)
+        self.root_state.move(move,player)
+        self.root = Node(None,None)
       
     def best_move(self): # returns the best move from the root node
         if self.root_state.game_over():

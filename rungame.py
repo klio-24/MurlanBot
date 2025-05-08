@@ -57,7 +57,7 @@ def play():
             processed_move = process_move(user_move,player_hand) # processes the input to get the actual cards played
        
             state.move(processed_move,"player")
-            MCTS.move(processed_move) # moves the root of the tree to the new state
+            MCTS.move(processed_move,"player") # moves the root of the tree to the new state
             print("You played:")
             for ind,card in enumerate(user_move):
                 print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
@@ -72,7 +72,7 @@ def play():
             bot_move = MCTS.make_move()
             num_rollouts, run_time = MCTS.stats()
             state.move(bot_move,"bot")
-            MCTS.move(bot_move)
+            MCTS.move(bot_move,"player")
 
             print("Search algorithm performed ", num_rollouts, "rollouts in ", run_time, "seconds")
 
