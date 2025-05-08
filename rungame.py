@@ -59,7 +59,7 @@ def play():
             state.move(processed_move,"player")
             MCTS.move(processed_move,"player") # moves the root of the tree to the new state
             print("You played:")
-            for ind,card in enumerate(user_move):
+            for ind,card in enumerate(processed_move):
                 print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
             if state.game_over():
                 print("Game over: You win!")
@@ -69,7 +69,7 @@ def play():
             print("Bot has no valid moves, it's your turn again!")
             continue
         else:
-            bot_move = MCTS.make_move()
+            bot_move = MCTS.move()
             num_rollouts, run_time = MCTS.stats()
             state.move(bot_move,"bot")
             MCTS.move(bot_move,"player")
