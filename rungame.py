@@ -2,6 +2,7 @@ import random
 from MonteCarloTreeSearch import mcts
 from MurlanState import game_state
 from GameParams import standard_deck
+from GameParams import MCTSMeta
 
 def process_move(input,hand):
     numbers = [int(x)-1 for x in input.split('/') if x.isdigit()] # does the processing (minus one as indexes on screen start from 1)
@@ -69,12 +70,16 @@ def play():
             print("Bot has no valid moves, it's your turn again!")
             continue
         else:
-            bot_move = MCTS.move()
-            num_rollouts, run_time = MCTS.stats()
-            state.move(bot_move,"bot")
-            MCTS.move(bot_move,"player")
+            print("Bot is thinking...")
+            MCTS.search(MCTSMeta.SEARCH_TIME) # performs the search algorithm to find the best move
 
+            num_rollouts, run_time = MCTS.stats()
             print("Search algorithm performed ", num_rollouts, "rollouts in ", run_time, "seconds")
+
+            bot_move = MCTS.best_move() 
+            state.move(bot_move,"bot")
+            MCTS.move(bot_move,"bot")
+
 
             print("The bot played:")
             for ind,card in enumerate(bot_move):

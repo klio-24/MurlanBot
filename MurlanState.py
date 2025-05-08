@@ -15,6 +15,9 @@ class game_state:
     def valid_moves(self,hand,on_table):
         res = []
 
+        if on_table:
+            res.append([])  # Empty move is valid if cards are on the table - you can't skip your turn
+
         if not on_table:
             # Single 
             for card in hand:

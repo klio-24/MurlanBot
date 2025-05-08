@@ -31,9 +31,8 @@ class mcts:
         self.run_time = 0
         self.node_count = 0
         self.num_rollouts = 0
-        self.search_time = MCTSMeta.SEARCH_TIME
     
-    def select_node(self,node): # algorithm to select node, picks all with maximum value for searching, then randomly selects one of them
+    def select_node(self): # algorithm to select node, picks all with maximum value for searching, then randomly selects one of them
         
         node = self.root
         state = deepcopy(self.root_state)
@@ -42,9 +41,10 @@ class mcts:
             children = list(node.children.values())
             random.shuffle(children) # avoids bias by selecting random best child
             node = max(children, key=lambda child: child.value())
+            state.move(node.move)
 
         
-        return node
+        return node, state
         
 
     def move_to_tuple(self,move): # converts the move to a tuple so it can be used as a key in the dictionary
@@ -81,18 +81,35 @@ class mcts:
             node.N += 1
             node = node.parent
 
-    def search(self): # performs the actual MCTS
+    def search(self,t_max): # performs the actual MCTS
         start_time = time.process_time()
-        t_max = self.search_time
         num_rollouts = 0
         while time.process_time() - start_time < t_max:
-            node, state = self.select_move()
+            node, state = self.select_node()
             self.backpropogate(node, self.rollout(state))
             num_rollouts += 1
         run_time = time.process_time() - start_time
         self.run_time = run_time
         self.num_rollouts = num_rollouts
 
+
+    def best_move(self): # returns the best move from the root node
+        if self.root_state.game_over():
+            return [-1]
+
+        if move in self.root.children:
+            self.root = self.root.children[move]
+        
+        mcts.search(self.search_time)
+        move = mcts.best_move()
+        # we need to find all those moves with the highest value, then randomly select one of them so as not to bias the search to one branch
+
+        max_value = max(self.root.children.values(), key=lambda n: n.N).N
+        max_nodes = [n for n in self.root.children.values() if n.N == max_value]
+        best_child = random.choice(max_nodes)
+
+        return best_child.move
+    
     def move(self, move,player): # moves the root of the tree to the new state
         
         if self.move_to_tuple(move) in self.root.children:
@@ -103,19 +120,7 @@ class mcts:
         self.root_state.move(move,player)
         self.root = Node(None,None)
       
-    def best_move(self): # returns the best move from the root node
-        if self.root_state.game_over():
-            return [-1]
 
-        if move in self.root.children:
-            self.root = self.root.children[move]
-        
-        mcts.search(self.search_time)
-        move = mcts.best_move()
-        best_child = max(self.root.children.values(), key=lambda n: n.N/n.Q if n.N > 0 else -1)  
-        self.root = self.root.children[move]
-
-        return best_child.move
 
     def stats(self):
         return self.num_rollouts, self.run_time
