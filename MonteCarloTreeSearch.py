@@ -72,11 +72,11 @@ class mcts:
             elif self.result == 1 and self.turn == 0: # Bot won and currently a player node
                 node.Q += 0
             elif self.result == 2 and self.turn == 1: # Player won and currently a bot node
-                node.Q += 0
+                node.Q += 0 
             node.N += 1
             node = node.parent
 
-    def run(self): # performs the actual MCTS
+    def search(self): # performs the actual MCTS
         start_time = time.process_time()
         t_max = self.search_time
         num_rollouts = 0
@@ -97,8 +97,7 @@ class mcts:
         self.root_state.move(move)
         self.root = Node(None)
       
-
-    def make_move(self): # after time up, select move with highest Q through sorting, and moves the root to that node
+    def best_move(self): # returns the best move from the root node
         if self.root_state.game_over():
             return [-1]
 
