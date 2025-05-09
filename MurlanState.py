@@ -69,6 +69,13 @@ class game_state:
         if len(self.player_hand) == 0 or len(self.bot_hand) == 0:
             return True 
     
+    def get_result(self):
+        if len(self.player_hand) == 0:
+            return 1
+        elif len(self.bot_hand) == 0:
+            return 2
+        else:
+            return 0
     def move(self,cards,player):
         for i in cards:
             if player == "bot":

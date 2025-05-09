@@ -349,5 +349,5 @@ class GameMeta:
 
 class MCTSMeta:
     EXPLORATION = math.sqrt(2) # UNDERSTAND THIS VALUE LATER
-    SEARCH_TIME = 1 # seconds
+    SEARCH_TIME = 10 # seconds
 

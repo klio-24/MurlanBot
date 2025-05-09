@@ -61,23 +61,26 @@ class mcts:
             parent.children[self.move_to_tuple(move)] = Node(move, parent)
         return True
 
-    def rollout(self, state = game_state): # performs random moves on this node until the end and gets the outcome
-
+    def rollout(self): # performs random moves on this node until the end and gets the outcome
+        state = deepcopy(self.root_state) # we don't keep the nodes along the way, just want the outcome
+        current_turn = state.turn
+        # rollout needs to track current turn so backpropogate then knows whos turn it is, and therefore what value to assign
         while not state.game_over():
-            move = random.choice(state.valid_moves())
-            state.move(move)
-        return state.get_result()  
+            if state.turn == 0: # player turn
+                move = random.choice(state.valid_moves(state.player_hand,state.on_table))
+            else: # bot turn
+                move = random.choice(state.valid_moves(state.bot_hand,state.on_table))
+            state.move(move,"bot" if state.turn == 1 else "player")
+        result = state.get_result()
+        return result, current_turn
     
-    def backpropogate(self, node): # traverses back up the tree while updating values along the way
-        while node is not None:  
-            if self.result == 1 and self.turn == 1: # Bot won and currently on a bot node
+    def backpropogate(self, node, result, turn): # traverses back up the tree while updating values along the way
+        # we need to pass in result and turn so we know what to update: you can't use self result and self turn because they are not set yet
+        while node is not None:
+            if result == 1 and turn == 1:
                 node.Q += 1
-            elif self.result == 2 and self.turn == 0: # Player won and currently on a player node
+            elif result == 2 and turn == 0:
                 node.Q += 1
-            elif self.result == 1 and self.turn == 0: # Bot won and currently a player node
-                node.Q += 0
-            elif self.result == 2 and self.turn == 1: # Player won and currently a bot node
-                node.Q += 0 
             node.N += 1
             node = node.parent
 
@@ -86,7 +89,9 @@ class mcts:
         num_rollouts = 0
         while time.process_time() - start_time < t_max:
             node, state = self.select_node()
-            self.backpropogate(node, self.rollout(state))
+            result, turn = self.rollout()
+
+            self.backpropogate(node, result, turn)
             num_rollouts += 1
         run_time = time.process_time() - start_time
         self.run_time = run_time
@@ -97,11 +102,7 @@ class mcts:
         if self.root_state.game_over():
             return [-1]
 
-        if move in self.root.children:
-            self.root = self.root.children[move]
         
-        mcts.search(self.search_time)
-        move = mcts.best_move()
         # we need to find all those moves with the highest value, then randomly select one of them so as not to bias the search to one branch
 
         max_value = max(self.root.children.values(), key=lambda n: n.N).N
