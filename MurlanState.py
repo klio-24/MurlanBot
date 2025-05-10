@@ -23,20 +23,20 @@ class game_state:
             for card in hand:
                 res.append([card])
 
-            # Doubles 
-            rank_counts = Counter(card["rank"] for card in hand)
-            for rank, count in rank_counts.items():
-                if count >= 2:
-                    cards_of_rank = [card for card in hand if card["rank"] == rank]
-                    for combo in combinations(cards_of_rank, 2):
-                        res.append(list(combo))
+            # # Doubles 
+            # rank_counts = Counter(card["rank"] for card in hand)
+            # for rank, count in rank_counts.items():
+            #     if count >= 2:
+            #         cards_of_rank = [card for card in hand if card["rank"] == rank]
+            #         for combo in combinations(cards_of_rank, 2):
+            #             res.append(list(combo))
 
-            # Triple
-            for rank, count in rank_counts.items():
-                if count >= 3:
-                    cards_of_rank = [card for card in hand if card["rank"] == rank]
-                    for combo in combinations(cards_of_rank, 3):
-                        res.append(list(combo))
+            # # Triple
+            # for rank, count in rank_counts.items():
+            #     if count >= 3:
+            #         cards_of_rank = [card for card in hand if card["rank"] == rank]
+            #         for combo in combinations(cards_of_rank, 3):
+            #             res.append(list(combo))
 
         else:
             power_to_beat = on_table[0]["rank"]
@@ -46,23 +46,23 @@ class game_state:
                     if card["rank"] > power_to_beat:
                         res.append([card])
 
-            elif len(hand) == 2:
-                # Double
-                rank_counts = Counter(card["rank"] for card in hand)
-                for rank, count in rank_counts.items():
-                    if count >= 2 and rank > power_to_beat:
-                        cards_of_rank = [card for card in hand if card["rank"] == rank]
-                        for combo in combinations(cards_of_rank, 2):
-                            res.append(list(combo))
+            # elif len(hand) == 2:
+            #     # Double
+            #     rank_counts = Counter(card["rank"] for card in hand)
+            #     for rank, count in rank_counts.items():
+            #         if count >= 2 and rank > power_to_beat:
+            #             cards_of_rank = [card for card in hand if card["rank"] == rank]
+            #             for combo in combinations(cards_of_rank, 2):
+            #                 res.append(list(combo))
 
-            else:
-                # Triple
-                rank_counts = Counter(card["rank"] for card in hand)
-                for rank, count in rank_counts.items():
-                    if count >= 3 and rank > power_to_beat:
-                        cards_of_rank = [card for card in hand if card["rank"] == rank]
-                        for combo in combinations(cards_of_rank, 3):
-                            res.append(list(combo))
+            # else:
+            #     # Triple
+            #     rank_counts = Counter(card["rank"] for card in hand)
+            #     for rank, count in rank_counts.items():
+            #         if count >= 3 and rank > power_to_beat:
+            #             cards_of_rank = [card for card in hand if card["rank"] == rank]
+            #             for combo in combinations(cards_of_rank, 3):
+            #                 res.append(list(combo))
         return res
 
     def game_over(self):

@@ -30,7 +30,7 @@ def play():
     # Ensuring the shuffled hands are in the same order as the deck so the lookups work right
     deck_order = {id(card): idx for idx, card in enumerate(standard_deck.deck)}
     player_hand = sorted(player_hand, key=lambda card: deck_order[id(card)])
-    bot_hand = sorted(player_hand, key=lambda card: deck_order[id(card)])
+    bot_hand = sorted(bot_hand, key=lambda card: deck_order[id(card)])
 
 
     # Initialise game state with initial conditions
@@ -86,7 +86,7 @@ def play():
                 print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
             
             if state.game_over():
-                "Game over: Bot won!"
+                print("Game over: Bot won!")
                 break
 
 if __name__ == "__main__": # this line ensures game is played only when this script is run and not and import of this script in another file

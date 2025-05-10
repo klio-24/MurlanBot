@@ -18,11 +18,19 @@ class Node:
         self.Q = 0 # win rate at this node
         self.children = {}
         self.result = 0 # I think this should be like 0: continue, 1: Bot wins, 2: player wins
+    
     def value(self):
         if self.N == 0:
             return float('inf')
         return self.Q / self.N + MCTSMeta.EXPLORATION * math.sqrt(math.log(self.parent.N) / self.N)      
-      
+    
+    def move_to_tuple(self,move): # converts the move to a tuple so it can be used as a key in the dictionary
+        return tuple(sorted((card["card"], card["suit"], card["rank"]) for card in move))
+    
+    def add_children(self,children):
+        for child in children:
+            move_key = self.move_to_tuple(child.move)
+            self.children[move_key] = child
     
 class mcts:
     def __init__(self, state = game_state()):
@@ -41,9 +49,15 @@ class mcts:
             children = list(node.children.values())
             random.shuffle(children) # avoids bias by selecting random best child
             node = max(children, key=lambda child: child.value())
-            state.move(node.move)
+            state.move(node.move,"bot" if state.turn == 1 else "player")
 
-        
+            if node.N == 0:
+                return node, state
+            
+        if self.expand(node, state): # if we can expand the node, we do so
+            node = random.choice(list(node.children.values()))
+            state.move(node.move,"bot" if state.turn == 1 else "player")
+
         return node, state
         
 
@@ -57,8 +71,8 @@ class mcts:
         if state.game_over():
             return False
 
-        for move in state.valid_moves():
-            parent.children[self.move_to_tuple(move)] = Node(move, parent)
+        children = [Node(move, parent) for move in state.valid_moves(state.player_hand,state.on_table)]
+        parent.add_children(children)
         return True
 
     def rollout(self): # performs random moves on this node until the end and gets the outcome
@@ -111,10 +125,10 @@ class mcts:
 
         return best_child.move
     
-    def move(self, move,player): # moves the root of the tree to the new state
+    def move(self,move,player): # moves the root of the tree to the new state
         
         if self.move_to_tuple(move) in self.root.children:
-            self.root_state.move(move) # need to move our copy of the state aswell to ensure both are in sync
+            self.root_state.move(move,player) # need to move our copy of the state aswell to ensure both are in sync
             self.root = self.root.children[self.move_to_tuple(move)]
             return
         
