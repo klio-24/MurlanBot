@@ -40,12 +40,12 @@ class game_state:
 
         else:
             power_to_beat = on_table[0]["rank"]
-            if len(hand) == 1:
-                # Single
-                for card in hand:
-                    if card["rank"] > power_to_beat:
-                        res.append([card])
+        # Single
+            for card in hand:
+                if card["rank"] > power_to_beat:
+                    res.append([card])
 
+            # FIX THESE CONDITIONS (WHY ARE THEY len(hand) == 2 AND len(hand) == 3))
             # elif len(hand) == 2:
             #     # Double
             #     rank_counts = Counter(card["rank"] for card in hand)

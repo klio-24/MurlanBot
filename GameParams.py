@@ -315,17 +315,17 @@ class standard_deck:
         "rank": 12
     }
 
-    joker_black = {
-        "card": "black joker",
-        "suit": "",
-        "rank": 13
-    }
+    # joker_black = {
+    #     "card": "black joker",
+    #     "suit": "",
+    #     "rank": 13
+    # }
 
-    joker_red = {
-        "card": "red joker",
-        "suit": "",
-        "rank": 14
-    }
+    # joker_red = {
+    #     "card": "red joker",
+    #     "suit": "",
+    #     "rank": 14
+    # }
 
     deck = [
         three_spades, three_hearts, three_diamonds, three_clubs,
@@ -340,9 +340,25 @@ class standard_deck:
         queen_spades, queen_hearts, queen_diamonds, queen_clubs,
         king_spades, king_hearts, king_diamonds, king_clubs,
         ace_spades, ace_hearts, ace_diamonds, ace_clubs,
-        two_spades, two_hearts, two_diamonds, two_clubs,
-        joker_black, joker_red
+        two_spades, two_hearts, two_diamonds, two_clubs
     ]
+
+    # deck = [
+    #     three_spades, three_hearts, three_diamonds, three_clubs,
+    #     four_spades, four_hearts, four_diamonds, four_clubs,
+    #     five_spades, five_hearts, five_diamonds, five_clubs,
+    #     six_spades, six_hearts, six_diamonds, six_clubs,
+    #     seven_spades, seven_hearts, seven_diamonds, seven_clubs,
+    #     eight_spades, eight_hearts, eight_diamonds, eight_clubs,
+    #     nine_spades, nine_hearts, nine_diamonds, nine_clubs,
+    #     ten_spades, ten_hearts, ten_diamonds, ten_clubs,
+    #     jack_spades, jack_hearts, jack_diamonds, jack_clubs,
+    #     queen_spades, queen_hearts, queen_diamonds, queen_clubs,
+    #     king_spades, king_hearts, king_diamonds, king_clubs,
+    #     ace_spades, ace_hearts, ace_diamonds, ace_clubs,
+    #     two_spades, two_hearts, two_diamonds, two_clubs,
+    #     joker_black, joker_red
+    # ]
 
 class GameMeta:
     deck = standard_deck.deck
