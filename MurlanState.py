@@ -83,7 +83,7 @@ class game_state:
             elif player == "player":
                 self.player_hand.remove(i)
         self.on_table = cards
-        self.turn = 1 if player == "player" else 0
+        self.turn = 1 if player == "player" else 0 # here is where we switch turn value
 
     def random_possible_bot_hand(self,turn,bot_hand,player_hand_size):
         if turn == "bot":

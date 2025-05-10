@@ -82,8 +82,8 @@ def play():
 
 
             print("The bot played:")
-            for ind,card in enumerate(bot_move):
-                print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
+            for card in bot_move:
+                print(card["card"], " of ", card["suit"], sep='')
             
             if state.game_over():
                 print("Game over: Bot won!")

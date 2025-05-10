@@ -45,11 +45,13 @@ class mcts:
         node = self.root
         state = deepcopy(self.root_state)
 
-        while node.children: 
-            children = list(node.children.values())
-            random.shuffle(children) # avoids bias by selecting random best child
-            node = max(children, key=lambda child: child.value())
-            state.move(node.move,"bot" if state.turn == 1 else "player")
+        while len(node.children) != 0:
+            children = node.children.values()
+            max_value = max(children, key=lambda n: n.value()).value()
+            max_nodes = [n for n in children if n.value() == max_value]
+
+            node = random.choice(max_nodes)
+            state.move(node.move,"bot" if state.turn == 1 else "player") # we need to move the state as well to keep it in sync with the tree
 
             if node.N == 0:
                 return node, state
