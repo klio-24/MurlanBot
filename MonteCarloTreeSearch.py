@@ -58,7 +58,7 @@ class mcts:
             
         if self.expand(node, state): # if we can expand the node, we do so
             node = random.choice(list(node.children.values()))
-            state.move(node.move,"bot" if state.turn == 1 else "player")
+            state.move(node.move, "player" if state.turn == 0 else "bot")
 
         return node, state
         
@@ -73,20 +73,21 @@ class mcts:
         if state.game_over():
             return False
 
-        children = [Node(move, parent) for move in state.valid_moves(state.player_hand,state.on_table)]
+        hand = state.player_hand if state.turn == 0 else state.bot_hand
+        children = [Node(move, parent) for move in state.valid_moves(hand, state.on_table)]
         parent.add_children(children)
         return True
 
-    def rollout(self): # performs random moves on this node until the end and gets the outcome
-        state = deepcopy(self.root_state) # we don't keep the nodes along the way, just want the outcome
+    def rollout(self):  # performs random moves until the game ends and returns the result
+        state = deepcopy(self.root_state)
         current_turn = state.turn
-        # rollout needs to track current turn so backpropogate then knows whos turn it is, and therefore what value to assign
+
         while not state.game_over():
-            if state.turn == 0: # player turn
-                move = random.choice(state.valid_moves(state.player_hand,state.on_table))
-            else: # bot turn
-                move = random.choice(state.valid_moves(state.bot_hand,state.on_table))
-            state.move(move,"bot" if state.turn == 1 else "player")
+            player = "bot" if state.turn == 1 else "player"
+            hand = state.bot_hand if player == "bot" else state.player_hand
+            move = random.choice(state.valid_moves(hand, state.on_table))
+            state.move(move, player)
+
         result = state.get_result()
         return result, current_turn
     
