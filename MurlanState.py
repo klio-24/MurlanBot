@@ -114,4 +114,8 @@ class game_state:
         print("Your Hand:")
         for ind,card in enumerate(self.player_hand):
             print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
+
+        print("Opponent's Hand:")
+        for ind,card in enumerate(self.bot_hand):
+            print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
          
