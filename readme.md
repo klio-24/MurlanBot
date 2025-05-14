@@ -5,3 +5,5 @@ In these types of games, it is not always optimal to play the lowest card possib
 MCTS works by exploring possible moves at each turn and then selecting the move with the highest probability of winning. The MCTS code was developed using the following tutorial: https://www.harrycodes.com/blog/monte-carlo-tree-search
 
 The program is deployed on a website using AWS Lambda to run a Flask app packaged using Zappa, with other AWS services used to facilitate the API calls and custom domain, namely API Gateway and Route 53.
+
+The game can be played at https://murlanbot.xyz
