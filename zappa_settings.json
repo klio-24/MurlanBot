@@ -8,11 +8,12 @@
             "botocore",
             "s3transfer",
             "concurrent"
-        ],
+        ],  
         "profile_name": "default",
         "project_name": "murlanbot",
         "runtime": "python3.9",
         "s3_bucket": "murlanfiles",
+        "certificate": "letsencrypt",
         "domain": "murlanbot.xyz"
     }
 }
