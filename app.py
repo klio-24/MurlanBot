@@ -12,6 +12,7 @@ def index():
 def move():
     data = request.get_json()
     player_move = data.get('move')
+    game.save_to_db(player_move)
     result = game.play_move(player_move)
     return jsonify({'output': result})
 
