@@ -7,7 +7,6 @@ from GameParams import MCTSMeta
 
 import boto3
 import json
-import uuid
 import random
 
 class Game:
@@ -15,7 +14,6 @@ class Game:
     def __init__(self):
         self.dynamodb = boto3.resource('dynamodb')
         self.table = self.dynamodb.Table('MurlanGameState')
-        self.uuid = str(uuid.uuid4())  # Generate a unique session ID for the game
 
     def save_game_state(self, session_id, state):
         self.table.put_item(
