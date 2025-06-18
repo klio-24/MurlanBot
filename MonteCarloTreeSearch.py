@@ -128,17 +128,8 @@ class mcts:
 
         return best_child.move
     
-    def move(self,move,player): # moves the root of the tree to the new state
-        
-        if self.move_to_tuple(move) in self.root.children:
-            self.root_state.move(move,player) # need to move our copy of the state aswell to ensure both are in sync
-            self.root = self.root.children[self.move_to_tuple(move)]
-            return
-        
-        self.root_state.move(move,player)
-        self.root = Node(None,None)
-      
-
+    # removed def move as it is not needed anymore, we generate a new tree each move
+    
 
     def stats(self):
         return self.num_rollouts, self.run_time

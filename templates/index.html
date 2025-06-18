@@ -4,9 +4,12 @@
     <title>Card Game</title>
     <script>
 
-
+        <p>
+            <strong>Instructions:</strong> Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': 
+        </p>
         async function sendMove() {
-            const move = document.getElementById("moveInput").value;
+            const move = document.getElementById("moveInput").value;    
+            document.getElementById("output").textContent = "Bot is thinking...";
             const res = await fetch('/move', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

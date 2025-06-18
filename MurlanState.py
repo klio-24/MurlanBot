@@ -65,11 +65,8 @@ class game_state:
             #                 res.append(list(combo))
         return res
 
-    def game_over(self):
-        if len(self.player_hand) == 0 or len(self.bot_hand) == 0:
-            return True 
     
-    def get_result(self):
+    def game_status(self):
         if len(self.player_hand) == 0:
             return 1
         elif len(self.bot_hand) == 0:
@@ -97,25 +94,28 @@ class game_state:
 
         return self.bot_possible_cards[0:player_hand_size-1]
         
-    def print_state(self):
+    def get_state_text(self):
+        output = []
 
-        if len(self.bot_hand)>1:
-            print("Opponent has many cards left")
+        if len(self.bot_hand) > 1:
+            output.append("Opponent has many cards left")
         else:
-            print("Opponent has 1 card left")
-    
+            output.append("Opponent has 1 card left")
+
         if self.on_table:
-            print("Move on table is:")
-            for ind,card in enumerate(self.on_table):
-                print(card["card"], " of ", card["suit"], sep='')
+            output.append("Move on table is:")
+            for card in self.on_table:
+                output.append(f"{card['card']} of {card['suit']}")
         else:
-            print("You have a free turn")
+            output.append("You have a free turn")
 
-        print("Your Hand:")
-        for ind,card in enumerate(self.player_hand):
-            print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
+        output.append("Your Hand:")
+        for i, card in enumerate(self.player_hand):
+            output.append(f"{i+1}: {card['card']} of {card['suit']}")
 
-        print("Opponent's Hand:")
-        for ind,card in enumerate(self.bot_hand):
-            print(ind+1,": ", card["card"], " of ", card["suit"], sep='')
+        output.append("Opponent's Hand:")
+        for i, card in enumerate(self.bot_hand):
+            output.append(f"{i+1}: {card['card']} of {card['suit']}")
+
+        return "\n".join(output)
          
