@@ -7,32 +7,42 @@ game = Game()
 @app.route('/')
 def index():
     game.initialise_game()  # sets up deck, hands, etc.
+    # NEED TO FIX SavGAMESTATE - UNDERSTAND AND USE @CLASSMETHOD
+    # game.save_game_state_to_db()  # save initial state to DB
     return render_template('index.html')
 
 @app.route('/move', methods=['POST'])
 def move():
-    data = request.get_json()
-    player_move = data.get('move')
+    # state = game.load_game_state_from_db()
 
-    # Validate and process the player's move
-   #valid = game.validate_move(player_move)
-   #if not valid:
-        #return jsonify({'error': 'Invalid move'}), 400
-
-    # Update game state with player move
-    game.play_move(player_move)
-
-    # Bot calculates and plays its move (if game not over)
-    if not game.is_game_over():
-        game.bot_move()
-
-    # Get updated state
-    state_text = game.get_state_text()
     return jsonify({
-        'state': state_text,
-        'num_rollouts': game.num_rollouts,
-        'search_time': game.search_time
+        'output':'yes'  # Assuming game_state has a to_dict method
     })
+    # data = request.get_json()
+    # player_move = data.get('move')
+
+
+    # game.play_move(player_move)
+
+    
+    # state = game.load_game_state_from_db()
+
+    # if state.game_status() == 1:
+    #     return jsonify({
+    #         'status': 'game_over',
+    #         'message': 'You win!'
+    #     })
+    # else:
+    #     return None
+    
+
+    # # Get updated state
+    # state_text = game.get_state_text()
+    # return jsonify({
+    #     'state': state_text,
+    #     'num_rollouts': game.num_rollouts,
+    #     'search_time': game.search_time
+    # })
 
 if __name__ == '__main__':
     app.run(debug=True)

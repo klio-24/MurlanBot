@@ -1,12 +1,8 @@
 <!doctype html>
 <html>
 <head>
-    <title>Card Game</title>
+    <title>MurlanBot</title>
     <script>
-
-        <p>
-            <strong>Instructions:</strong> Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': 
-        </p>
         async function sendMove() {
             const move = document.getElementById("moveInput").value;    
             document.getElementById("output").textContent = "Bot is thinking...";
@@ -22,7 +18,10 @@
     </script>
 </head>
 <body>
-    <h1>Card Game</h1>
+    <h1>MurlanBot</h1>
+    <p>
+        <strong>Instructions:</strong> Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': 
+    </p>
     <pre id="output">Waiting for your move...</pre>
     <input id="moveInput" type="text" placeholder="Type your move" onkeydown="if(event.key==='Enter')sendMove()">
     <button onclick="sendMove()">Submit</button>

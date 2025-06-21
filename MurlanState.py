@@ -1,9 +1,10 @@
 # defines game class
 
-from collections import Counter
-from itertools import combinations
+import copy
 import random
 
+from collections import Counter
+from itertools import combinations
 class game_state:
     def __init__(self):
         self.on_table = []
@@ -23,21 +24,6 @@ class game_state:
             for card in hand:
                 res.append([card])
 
-            # # Doubles 
-            # rank_counts = Counter(card["rank"] for card in hand)
-            # for rank, count in rank_counts.items():
-            #     if count >= 2:
-            #         cards_of_rank = [card for card in hand if card["rank"] == rank]
-            #         for combo in combinations(cards_of_rank, 2):
-            #             res.append(list(combo))
-
-            # # Triple
-            # for rank, count in rank_counts.items():
-            #     if count >= 3:
-            #         cards_of_rank = [card for card in hand if card["rank"] == rank]
-            #         for combo in combinations(cards_of_rank, 3):
-            #             res.append(list(combo))
-
         else:
             power_to_beat = on_table[0]["rank"]
         # Single
@@ -45,24 +31,15 @@ class game_state:
                 if card["rank"] > power_to_beat:
                     res.append([card])
 
-            # FIX THESE CONDITIONS (WHY ARE THEY len(hand) == 2 AND len(hand) == 3))
-            # elif len(hand) == 2:
-            #     # Double
-            #     rank_counts = Counter(card["rank"] for card in hand)
-            #     for rank, count in rank_counts.items():
-            #         if count >= 2 and rank > power_to_beat:
-            #             cards_of_rank = [card for card in hand if card["rank"] == rank]
-            #             for combo in combinations(cards_of_rank, 2):
-            #                 res.append(list(combo))
+        # FIX THIS CONDITION (WHY ARE THEY len(hand) == 2)
+        #     # Double
+        #     rank_counts = Counter(card["rank"] for card in hand)
+        #     for rank, count in rank_counts.items():
+        #         if count >= 2 and rank > power_to_beat:
+        #             cards_of_rank = [card for card in hand if card["rank"] == rank]
+        #             for combo in combinations(cards_of_rank, 2):
+        #                 res.append(list(combo))
 
-            # else:
-            #     # Triple
-            #     rank_counts = Counter(card["rank"] for card in hand)
-            #     for rank, count in rank_counts.items():
-            #         if count >= 3 and rank > power_to_beat:
-            #             cards_of_rank = [card for card in hand if card["rank"] == rank]
-            #             for combo in combinations(cards_of_rank, 3):
-            #                 res.append(list(combo))
         return res
 
     
@@ -73,6 +50,7 @@ class game_state:
             return 2
         else:
             return 0
+        
     def move(self,cards,player):
         for i in cards:
             if player == "bot":
@@ -94,27 +72,45 @@ class game_state:
 
         return self.bot_possible_cards[0:player_hand_size-1]
         
-    def get_state_text(self):
+
+    def to_dict(self):
+        return {
+            'on_table': copy.deepcopy(self.on_table),
+            'bot_hand': copy.deepcopy(self.bot_hand),
+            'player_hand': copy.deepcopy(self.player_hand),
+            'bot_possible_cards': copy.deepcopy(self.bot_possible_cards)
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        state = cls()
+        state.on_table = copy.deepcopy(data.get('on_table', []))
+        state.bot_hand = copy.deepcopy(data.get('bot_hand', []))
+        state.player_hand = copy.deepcopy(data.get('player_hand', []))
+        state.bot_possible_cards = copy.deepcopy(data.get('bot_possible_cards', []))
+        return state
+    
+    def get_state_text(self, cur_state):
         output = []
 
-        if len(self.bot_hand) > 1:
+        if len(cur_state.bot_hand) > 1:
             output.append("Opponent has many cards left")
         else:
             output.append("Opponent has 1 card left")
 
-        if self.on_table:
+        if cur_state.on_table:
             output.append("Move on table is:")
-            for card in self.on_table:
+            for card in cur_state.on_table:
                 output.append(f"{card['card']} of {card['suit']}")
         else:
             output.append("You have a free turn")
 
         output.append("Your Hand:")
-        for i, card in enumerate(self.player_hand):
+        for i, card in enumerate(cur_state.player_hand):
             output.append(f"{i+1}: {card['card']} of {card['suit']}")
 
         output.append("Opponent's Hand:")
-        for i, card in enumerate(self.bot_hand):
+        for i, card in enumerate(cur_state.bot_hand):
             output.append(f"{i+1}: {card['card']} of {card['suit']}")
 
         return "\n".join(output)

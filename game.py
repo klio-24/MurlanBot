@@ -1,8 +1,6 @@
 import secrets
 import boto3
-import json
 import random
-import copy
 
 from MonteCarloTreeSearch import mcts
 from MurlanState import game_state
@@ -18,45 +16,6 @@ class Game:
         self.dynamodb = boto3.resource('dynamodb', region_name='eu-west-2')
         self.table = self.dynamodb.Table('game_sessions')
 
-    def play_move(self, move):
-        response = f"You chose: {self.load_from_db()}"
-        self.history.append(response)
-        return "\n".join(self.history)
-    
-    def save_game_state_to_db(self,new_state):
-        self.table.put_item(Item={"session_id": self.session_id}) # ADD TO THIS THE GAME STATE
-
-    def load_game_state_from_db(self):
-        response = self.table.get_item(Key={"session_id": self.session_id})
-        return response.get('Item') # MODIFY TO RETURN THE GAME STATE
-
-
-    def to_dict(self):
-        return {
-            'on_table': copy.deepcopy(self.on_table),
-            'bot_hand': copy.deepcopy(self.bot_hand),
-            'player_hand': copy.deepcopy(self.player_hand),
-            'bot_possible_cards': copy.deepcopy(self.bot_possible_cards)
-        }
-    def from_dict(self, data):
-        state = cls()
-        state.on_table = copy.deepcopy(data.get('on_table', []))
-        state.bot_hand = copy.deepcopy(data.get('bot_hand', []))
-        state.player_hand = copy.deepcopy(data.get('player_hand', []))
-        state.bot_possible_cards = copy.deepcopy(data.get('bot_possible_cards', []))
-        return state
-    
-    # def process_move(input,hand):
-    #     numbers = [int(x)-1 for x in input.split('/') if x.isdigit()] # does the processing (minus one as indexes on screen start from 1)
-
-    #     translated_hand = []
-
-    #     for i in numbers:
-    #         translated_hand.append(hand[i]) # converts processed indexes to the play
-
-    #     return translated_hand
-
-    # need to change this where it just accepts a game state and plays one round of the game
 
     def initialise_game(self):
         deck = standard_deck.deck.copy() 
@@ -84,19 +43,50 @@ class Game:
         state.bot_possible_cards = deck
 
         # Save the initial game state to the database
-        self.save_game_state_to_db()
+        self.save_game_state_to_db(state)
 
-    def process_player_move(self, player_move, player_hand, state):
-        processed_hand = player_hand[player_move-1]
+    
+    def save_game_state_to_db(self, new_state):
+        item = {    
+            "session_id": self.session_id,
+            "game_state": new_state.to_dict()  # serialize the game state
+        }
+        self.table.put_item(Item=item)
+
+    def load_game_state_from_db(self):
+        response = self.table.get_item(Key={"session_id": self.session_id})
+        item = response.get('Item')
+        if not item or 'game_state' not in item:
+            return None  # Or raise an error / start new game
+        return game_state.from_dict(item['game_state'])  # deserialize the game state
+    
+    # def process_move(input,hand):
+    #     numbers = [int(x)-1 for x in input.split('/') if x.isdigit()] # does the processing (minus one as indexes on screen start from 1)
+    #     translated_hand = []
+    #     for i in numbers:
+    #         translated_hand.append(hand[i]) # converts processed indexes to the play
+    #     return translated_hand
+
+    def play_move(self, player_move):
+
+        state = self.load_game_state_from_db()
+
+
+        processed_hand = player_move[int(player_move)-1]
         state.move(processed_hand, "player")
-        # Store the updated game state in the database
-        self.save_game_state_to_db()
-        return True
+        # # Store the updated game state in the database
+        # self.save_game_state_to_db()
+        # return True
+        self.save_game_state_to_db(state)
+        response = state.get_state_text()
+        self.history.append(response)
+        return "\n".join(self.history)
 
-    def play_a_turn(self,stored_game_state,player_move):
+    def play_a_turn(self,stored_game_state):
 
         MCTS = mcts(stored_game_state)
-        stored_game_state
+        stored_game_state = self.load_game_state_from_db()  # Load the game state from the database
+
         
         # before processing the move, we check if bot has any valid moves
         # if len(stored_game_state.valid_moves(stored_game_state.bot_hand,stored_game_state.on_table)) == 0:
@@ -114,7 +104,9 @@ class Game:
 
         # removed the need to move the root of the MCTS as generating a new tree each move
         
-      
+        self.save_game_state_to_db(stored_game_state)  # Save the updated game state to the database
+
+
         game_status = stored_game_state.game_status() # checks the game status
         return game_status, bot_move, num_rollouts, run_time
     
