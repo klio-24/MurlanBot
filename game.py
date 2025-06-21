@@ -110,3 +110,29 @@ class Game:
         game_status = stored_game_state.game_status() # checks the game status
         return game_status, bot_move, num_rollouts, run_time
     
+
+    def get_state_text(self, cur_state):
+        output = []
+
+        if len(cur_state.bot_hand) > 1:
+            output.append("Opponent has many cards left")
+        else:
+            output.append("Opponent has 1 card left")
+
+        if cur_state.on_table:
+            output.append("Move on table is:")
+            for card in cur_state.on_table:
+                output.append(f"{card['card']} of {card['suit']}")
+        else:
+            output.append("You have a free turn")
+
+        output.append("Your Hand:")
+        for i, card in enumerate(cur_state.player_hand):
+            output.append(f"{i+1}: {card['card']} of {card['suit']}")
+
+        output.append("Opponent's Hand:")
+        for i, card in enumerate(cur_state.bot_hand):
+            output.append(f"{i+1}: {card['card']} of {card['suit']}")
+
+        return "\n".join(output)
+    

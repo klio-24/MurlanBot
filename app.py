@@ -6,17 +6,15 @@ game = Game()
 
 @app.route('/')
 def index():
-    game.initialise_game()  # sets up deck, hands, etc.
-    # NEED TO FIX SavGAMESTATE - UNDERSTAND AND USE @CLASSMETHOD
-    # game.save_game_state_to_db()  # save initial state to DB
+    game.initialise_game() 
     return render_template('index.html')
 
 @app.route('/move', methods=['POST'])
 def move():
-    # state = game.load_game_state_from_db()
 
+    state = game.load_game_state_from_db()
     return jsonify({
-        'output':'yes'  # Assuming game_state has a to_dict method
+        'output': game.get_state_text(state) # Assuming game_state has a to_dict method
     })
     # data = request.get_json()
     # player_move = data.get('move')
