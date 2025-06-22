@@ -72,20 +72,18 @@ class Game:
         state = self.load_game_state_from_db()
 
 
-        processed_hand = player_move[int(player_move)-1]
+        processed_hand = [state.player_hand[int(player_move)-1]]
         state.move(processed_hand, "player")
-        # # Store the updated game state in the database
-        # self.save_game_state_to_db()
-        # return True
-        self.save_game_state_to_db(state)
-        response = state.get_state_text()
-        self.history.append(response)
-        return "\n".join(self.history)
 
-    def play_a_turn(self,stored_game_state):
+        self.save_game_state_to_db(state)
+
+
+    def bot_play_a_turn(self):
+
+        stored_game_state = self.load_game_state_from_db()  # Load the game state from the database
 
         MCTS = mcts(stored_game_state)
-        stored_game_state = self.load_game_state_from_db()  # Load the game state from the database
+        
 
         
         # before processing the move, we check if bot has any valid moves
@@ -107,12 +105,23 @@ class Game:
         self.save_game_state_to_db(stored_game_state)  # Save the updated game state to the database
 
 
-        game_status = stored_game_state.game_status() # checks the game status
-        return game_status, bot_move, num_rollouts, run_time
     
+    def game_status(self):
+        status = self.load_game_state_from_db()
+        player_hand = status.player_hand
+        bot_hand = status.bot_hand
+
+        if len(player_hand) == 0:
+            return 1
+        elif len(bot_hand) == 0:
+            return 2
+        else:
+            return 0
 
     def get_state_text(self, cur_state):
         output = []
+
+
 
         if len(cur_state.bot_hand) > 1:
             output.append("Opponent has many cards left")

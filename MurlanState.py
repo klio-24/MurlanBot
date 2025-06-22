@@ -43,17 +43,11 @@ class game_state:
         return res
 
     
-    def game_status(self):
-        if len(self.player_hand) == 0:
-            return 1
-        elif len(self.bot_hand) == 0:
-            return 2
-        else:
-            return 0
+
         
     def move(self,cards,player):
         for i in cards:
-            if player == "bot":
+            if player == "bot": 
                 self.bot_hand.remove(i)
             elif player == "player":
                 self.player_hand.remove(i)

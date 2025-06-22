@@ -22,7 +22,7 @@
     <p>
         <strong>Instructions:</strong> Select moves by picking the cards based on the number before the semicolon, in ascending order, and separated by a '/': 
     </p>
-    <pre id="output">Waiting for your move...</pre>
+<pre id="output">{{ state_text }}</pre>
     <input id="moveInput" type="text" placeholder="Type your move" onkeydown="if(event.key==='Enter')sendMove()">
     <button onclick="sendMove()">Submit</button>
 </body>
