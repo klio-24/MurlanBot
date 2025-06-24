@@ -41,6 +41,7 @@ class Game:
         state.bot_hand = bot_hand
         state.player_hand = player_hand
         state.bot_possible_cards = deck
+        state.turn = 0  # Player starts first
 
         # Save the initial game state to the database
         self.save_game_state_to_db(state)
@@ -54,7 +55,7 @@ class Game:
         self.table.put_item(Item=item)
 
     def load_game_state_from_db(self):
-        response = self.table.get_item(Key={"session_id": self.session_id})
+        response = self.table.get_item(Key={"session_id": self.session_id},ConsistentRead=True)
         item = response.get('Item')
         if not item or 'game_state' not in item:
             return None  # Or raise an error / start new game
@@ -71,17 +72,20 @@ class Game:
 
         state = self.load_game_state_from_db()
 
-
+        print("play_move Current session ID:", self.session_id)
         processed_hand = [state.player_hand[int(player_move)-1]]
+        print(f"before state.move: {state.turn}")
         state.move(processed_hand, "player")
-
+        print(f"after state.move: {state.turn}")
         self.save_game_state_to_db(state)
 
 
     def bot_play_a_turn(self):
 
         stored_game_state = self.load_game_state_from_db()  # Load the game state from the database
-
+        print("bot_play_a_turn Current session ID:", self.session_id)
+        print("success")
+        print(f"state move in bot_play_a_turn: {stored_game_state.turn}")
         MCTS = mcts(stored_game_state)
         
 
@@ -92,14 +96,18 @@ class Game:
             
             # return information that bot skips turn
 
-    
         MCTS.search(MCTSMeta.SEARCH_TIME) # performs the search algorithm to find the best move
 
-        num_rollouts, run_time = MCTS.stats()
+        # # num_rollouts, run_time = MCTS.stats()
 
         bot_move = MCTS.best_move() 
-        stored_game_state.move(bot_move,"bot")
+        print(f"Bot move: {bot_move}")
+        # print bot hand
+        print(f"Bot hand: {stored_game_state.bot_hand}")
 
+        print(f"Player hand: {stored_game_state.player_hand}")
+        stored_game_state.move(bot_move,"bot")
+        # print player hand
         # removed the need to move the root of the MCTS as generating a new tree each move
         
         self.save_game_state_to_db(stored_game_state)  # Save the updated game state to the database

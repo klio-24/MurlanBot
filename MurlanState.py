@@ -13,6 +13,19 @@ class game_state:
         self.bot_possible_cards = []
         self.turn = 0 # 0 is player turn, 1 is bot turn
 
+    def get_result(self):
+        if len(self.player_hand) == 0:
+            return 1
+        elif len(self.bot_hand) == 0:
+            return 2
+        else:
+            return 0
+        
+    def game_over(self):
+        if len(self.player_hand) == 0 or len(self.bot_hand) == 0:
+            return True 
+    
+        
     def valid_moves(self,hand,on_table):
         res = []
 
@@ -72,9 +85,10 @@ class game_state:
             'on_table': copy.deepcopy(self.on_table),
             'bot_hand': copy.deepcopy(self.bot_hand),
             'player_hand': copy.deepcopy(self.player_hand),
-            'bot_possible_cards': copy.deepcopy(self.bot_possible_cards)
+            'bot_possible_cards': copy.deepcopy(self.bot_possible_cards),
+            'turn': self.turn  
         }
-    
+
     @classmethod
     def from_dict(cls, data):
         state = cls()
@@ -82,6 +96,6 @@ class game_state:
         state.bot_hand = copy.deepcopy(data.get('bot_hand', []))
         state.player_hand = copy.deepcopy(data.get('player_hand', []))
         state.bot_possible_cards = copy.deepcopy(data.get('bot_possible_cards', []))
+        state.turn = data.get('turn', 0)  
         return state
-    
          

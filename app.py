@@ -17,19 +17,19 @@ def move():
     data = request.get_json()
     player_move = data.get('move')
 
-
+    print("test")
     game.play_move(player_move)
 
+    
 
     if game.game_status() == 1:
         return jsonify({
             'output': "You win!"
         })
 
-    
-
     game.bot_play_a_turn()
 
+    print("bot played a turn")
     if game.game_status() == 2:
         return jsonify({
             'output': "You lose!"

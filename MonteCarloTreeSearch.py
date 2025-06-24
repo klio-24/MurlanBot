@@ -70,7 +70,7 @@ class mcts:
 
     def expand(self, parent: Node, state: game_state): # for a selected node, it gives it all children nodes which are possible
         
-        if state.game_over():
+        if len(state.player_hand) == 0 or len(state.bot_hand) == 0: # if the game is over, we don't expand
             return False
 
         hand = state.player_hand if state.turn == 0 else state.bot_hand
@@ -82,7 +82,7 @@ class mcts:
         state = deepcopy(self.root_state)
         current_turn = state.turn
 
-        while not state.game_over():
+        while len(state.player_hand) > 0 and len(state.bot_hand) > 0: # while the game is not over
             player = "bot" if state.turn == 1 else "player"
             hand = state.bot_hand if player == "bot" else state.player_hand
             move = random.choice(state.valid_moves(hand, state.on_table))
@@ -114,6 +114,9 @@ class mcts:
         self.run_time = run_time
         self.num_rollouts = num_rollouts
 
+    def game_over(self):
+        if len(self.root_state.player_hand) == 0 or len(self.root_state.bot_hand) == 0:
+            return True
 
     def best_move(self): # returns the best move from the root node
         if self.root_state.game_over():
