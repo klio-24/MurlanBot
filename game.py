@@ -147,9 +147,5 @@ class Game:
         for i, card in enumerate(cur_state.player_hand):
             output.append(f"{i+1}: {card['card']} of {card['suit']}")
 
-        output.append("Opponent's Hand:")
-        for i, card in enumerate(cur_state.bot_hand):
-            output.append(f"{i+1}: {card['card']} of {card['suit']}")
-
         return "\n".join(output)
     
