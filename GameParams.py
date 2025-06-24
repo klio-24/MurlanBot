@@ -364,6 +364,6 @@ class GameMeta:
     deck = standard_deck.deck
 
 class MCTSMeta:
-    EXPLORATION = math.sqrt(2) # UNDERSTAND THIS VALUE LATER
-    SEARCH_TIME = 1 # seconds
+    EXPLORATION = 3 # UNDERSTAND THIS VALUE LATER
+    SEARCH_TIME = 5 # seconds
 

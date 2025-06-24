@@ -58,15 +58,26 @@ class game_state:
     
 
         
-    def move(self,cards,player):
-        for i in cards:
-            if player == "bot": 
-                self.bot_hand.remove(i)
-            elif player == "player":
-                self.player_hand.remove(i)
-        self.on_table = cards
-        self.turn = 1 if player == "player" else 0 # here is where we switch turn value
+    def move(self, move, player):
+        if player == "player":
+            if move:
+                for card in move:
+                    self.player_hand.remove(card)
+                self.on_table = move
+            else:
+                # Player skips
+                self.on_table = []
+        elif player == "bot":
+            if move:
+                for card in move:
+                    self.bot_hand.remove(card)
+                self.on_table = move
+            else:
+                # Bot skips
+                self.on_table = []
 
+        self.turn = 1 - self.turn
+        
     def random_possible_bot_hand(self,turn,bot_hand,player_hand_size):
         if turn == "bot":
             for i in range(player_hand_size):

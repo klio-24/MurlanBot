@@ -72,11 +72,14 @@ class Game:
 
         state = self.load_game_state_from_db()
 
-        print("play_move Current session ID:", self.session_id)
-        processed_hand = [state.player_hand[int(player_move)-1]]
-        print(f"before state.move: {state.turn}")
-        state.move(processed_hand, "player")
-        print(f"after state.move: {state.turn}")
+        if player_move == "0":
+            # Skip move
+            state.move([], "player")
+        else:
+            # Normal move
+            processed_hand = [state.player_hand[int(player_move) - 1]]
+            state.move(processed_hand, "player")
+
         self.save_game_state_to_db(state)
 
 
