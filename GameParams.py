@@ -365,5 +365,5 @@ class GameMeta:
 
 class MCTSMeta:
     EXPLORATION = 3 # UNDERSTAND THIS VALUE LATER
-    SEARCH_TIME = 5 # seconds
+    SEARCH_TIME = 3 # seconds
 
