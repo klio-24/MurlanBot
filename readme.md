@@ -29,6 +29,7 @@ The bot and gameplay was initially developed as a command line script, however m
 
 ## CI/CD Implementation
 
+GitHub Actions
 
 ## Conclusion
 
