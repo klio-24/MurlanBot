@@ -12,6 +12,8 @@ The game can be played at https://murlanbot.xyz
 
 A full serverless microservices-based approach was used to minimise time spent on deployment, with most of the development time focused on developing the bot itself. Lambda functions reduce baseline costs as no VMs are constantly on.
 
+Zappa is used to deploy the Flask app to an AWS Lambda function.
+
 ![Diagram](diagram.jpg)
 
 ## Initial MCTS Development and Refactoring 
