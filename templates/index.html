@@ -6,7 +6,7 @@
         async function sendMove() {
             const move = document.getElementById("moveInput").value;    
             document.getElementById("output").textContent = "Bot is thinking...";
-            const res = await fetch('/move', {
+            const res = await fetch('/staging/move', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ move: move })
