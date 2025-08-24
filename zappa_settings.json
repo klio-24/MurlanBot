@@ -28,6 +28,8 @@
         "profile_name": "default",
         "project_name": "murlanbot",
         "runtime": "python3.9",
-        "s3_bucket": "murlanfiles"
+        "s3_bucket": "murlanfiles",
+        "manage_roles": false,
+        "role_name": "murlanbot-dev-ZappaLambdaExecutionRole"
         }
 }
