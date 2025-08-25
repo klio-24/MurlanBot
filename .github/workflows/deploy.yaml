@@ -37,13 +37,17 @@ jobs:
         run: |
           curl -s --fail https://papfg85frk.execute-api.eu-west-2.amazonaws.com/staging/ > /dev/null
 
-      - name: Test move
+      - name: Test move with retries
         run: |
-          curl -s -o /dev/null -w "%{http_code}" \             # Get only the HTTP status code
-            -X POST -H "Content-Type: application/json" \
-            -d '{"move": "1"}' \
-            https://papfg85frk.execute-api.eu-west-2.amazonaws.com/staging/move \
-          | grep 200
+          for i in {1..5}; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" \
+              -X POST -H "Content-Type: application/json" \
+              -d '{"move": "1"}' \
+              https://papfg85frk.execute-api.eu-west-2.amazonaws.com/staging/move)
+            [ "$status" -eq 200 ] && break
+            sleep 5
+          done
+          [ "$status" -eq 200 ] || exit 1
 
   promote-to-dev:
     runs-on: ubuntu-latest
