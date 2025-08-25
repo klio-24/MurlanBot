@@ -4,6 +4,8 @@ from game import Game
 app = Flask(__name__)
 game = Game()
 
+# testing CICD process - this comment should show on main branch
+
 @app.route('/')
 def index():
     game.initialise_game()
