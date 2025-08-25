@@ -60,7 +60,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Merge game.py from staging to main
+      - name: Merge app.py from staging to main
         run: |
           git config --global user.name "klio-24"
           git config --global user.email "klioballiu4@gmail.com"
@@ -68,8 +68,8 @@ jobs:
           git fetch origin
           git checkout main
           git checkout feature -- app.py
-          git commit -m "Promote game.py from staging to main"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
+          git commit -m "Promote app.py from staging to main"
+          git push https://x-access-token:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}} HEAD:main
 
       - name: Set up Python
         uses: actions/setup-python@v5
