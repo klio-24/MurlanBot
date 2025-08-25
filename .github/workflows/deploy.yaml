@@ -30,7 +30,7 @@ jobs:
           python -m venv .venv
           source .venv/bin/activate
           python -m pip install --upgrade pip
-          pip install zappa
+          pip install zappa, time, random, math, json, boto3, requests, Flask
           zappa update staging 
 
       - name: Init game
