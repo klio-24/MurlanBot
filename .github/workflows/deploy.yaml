@@ -30,7 +30,7 @@ jobs:
           python -m venv .venv
           source .venv/bin/activate
           python -m pip install --upgrade pip
-          pip install zappa, time, random, math, json, boto3, requests, Flask
+          pip install zappa Flask requests boto3
           zappa update staging 
 
       - name: Init game
@@ -81,5 +81,5 @@ jobs:
           python -m venv .venv
           source .venv/bin/activate
           python -m pip install --upgrade pip
-          pip install zappa
+          pip install zappa Flask requests boto3
           zappa update dev 
