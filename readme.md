@@ -29,6 +29,11 @@ The bot and gameplay was initially developed as a command line script, however m
 
 ## CI/CD Implementation
 
+GitHub Actions was utilised to implement the following CI/CD flow on a 'git push' to a feature branch:
+1. Update staging Lambda function using Zappa
+2. Perform integration test to ensure correct functionality
+3. If this succeeds, merge the file to the main branch
+4. Update the main deployment
 
 ## Conclusion
 
