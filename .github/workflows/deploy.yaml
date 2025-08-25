@@ -3,7 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - staging   
+      - feature 
 
 jobs:
   deploy-staging:
