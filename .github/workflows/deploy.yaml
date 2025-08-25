@@ -64,7 +64,7 @@ jobs:
 
           git fetch origin
           git checkout main
-          git checkout feature -- game.py
+          git checkout feature -- app.py
           git commit -m "Promote game.py from staging to main"
           git push origin main
 
